@@ -17,11 +17,11 @@ import java.util.UUID;
 @Table(name = "admins")
 public class Admin {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String username;
     private String email;
     private String password;
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
