@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.mentorshiptracker.constants.AppConstants.*;
+
 @Service
 @RequiredArgsConstructor
 public class SeedDataServiceImpl implements SeedDataService {
@@ -29,11 +31,11 @@ public class SeedDataServiceImpl implements SeedDataService {
     @Override
     public void seedPermissions() {
         //Instantiate new permissions
-        Permission manageMentorshipPermission = new Permission("Manage mentorship", "create, view, update and delete on mentorship(advisors and advisees)");
-        Permission viewMentorshipPermission = new Permission("View mentorship", "View mentorship only");
+        Permission manageMentorshipPermission = new Permission(MANAGE_MENTORSHIP, "create, view, update and delete on mentorship(advisors and advisees)");
+        Permission viewMentorshipPermission = new Permission(VIEW_MENTORSHIP, "View mentorship only");
         //check if permissions exists
-        boolean manageMentorshipPermissionExists = permissionRepository.existsByName("Manage mentorship");
-        boolean viewMentorshipPermissionExists = permissionRepository.existsByName("View mentorship");
+        boolean manageMentorshipPermissionExists = permissionRepository.existsByName(MANAGE_MENTORSHIP);
+        boolean viewMentorshipPermissionExists = permissionRepository.existsByName(VIEW_MENTORSHIP);
         if (!manageMentorshipPermissionExists) {
             permissionRepository.save(manageMentorshipPermission);
         }
@@ -45,20 +47,20 @@ public class SeedDataServiceImpl implements SeedDataService {
     @Override
     public void seedRoles() {
         //Instantiate a new manager role
-        Role mentorshipManagerRole = new Role("Mentorship manager", "Perform mentorship associated CRUD actions");
+        Role mentorshipManagerRole = new Role(MANAGER_ROLE_NAME, "Perform mentorship associated CRUD actions");
         //find permissions
-        Permission manageMentorshipPermission = permissionRepository.findByName("Manage mentorship");
-        Permission viewMentorshipPermission = permissionRepository.findByName("View mentorship");
+        Permission manageMentorshipPermission = permissionRepository.findByName(MANAGE_MENTORSHIP);
+        Permission viewMentorshipPermission = permissionRepository.findByName(VIEW_MENTORSHIP);
         //set list of permissions on role
         mentorshipManagerRole.setPermissions(List.of(manageMentorshipPermission, viewMentorshipPermission));
 
-        boolean mentorshipManagerRoleExists = roleRepository.existsByName("Mentorship manager");
+        boolean mentorshipManagerRoleExists = roleRepository.existsByName(MANAGER_ROLE_NAME);
         if (!mentorshipManagerRoleExists) {
             roleRepository.save(mentorshipManagerRole);
         }
 
-        Role administratorRole = new Role("Administrator", "Perform all actions");
-        boolean administratorRoleExists = roleRepository.existsByName("Administrator");
+        Role administratorRole = new Role(ADMIN_ROLE_NAME, "Perform all actions");
+        boolean administratorRoleExists = roleRepository.existsByName(ADMIN_ROLE_NAME);
 
         if (!administratorRoleExists) {
             roleRepository.save(administratorRole);
@@ -74,7 +76,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         3. set admin Role and save
         */
 
-        Role administratorRole = roleRepository.findByName("Administrator");
+        Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
         Admin admin = new Admin("admin", "admin@mentor.com", "admin123");
         boolean adminExists = adminRepository.existsByEmail(admin.getEmail());
         if (!adminExists){
