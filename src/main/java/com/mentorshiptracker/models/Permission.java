@@ -22,4 +22,14 @@ public class Permission {
 
     @ManyToMany(mappedBy = "permissions")
     private List<Role> roles;
+
+    public Permission(UUID id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+    public Permission( String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
