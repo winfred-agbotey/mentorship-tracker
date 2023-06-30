@@ -52,7 +52,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         //set list of permissions on role
         mentorshipManagerRole.setPermissions(List.of(manageMentorshipPermission, viewMentorshipPermission));
 
-        boolean mentorshipManagerRoleExists = roleRepository.existsByName("Manage mentorship");
+        boolean mentorshipManagerRoleExists = roleRepository.existsByName("Mentorship manager");
         if (!mentorshipManagerRoleExists) {
             roleRepository.save(mentorshipManagerRole);
         }
@@ -70,12 +70,17 @@ public class SeedDataServiceImpl implements SeedDataService {
         /*
         1.find admin role
         2.Instantiate a new admin
+        3.check if admin already exists
         3. set admin Role and save
         */
+
         Role administratorRole = roleRepository.findByName("Administrator");
         Admin admin = new Admin("admin", "admin@mentor.com", "admin123");
-        admin.setRole(administratorRole);
-        adminRepository.save(admin);
+        boolean adminExists = adminRepository.existsByEmail(admin.getEmail());
+        if (!adminExists){
+            admin.setRole(administratorRole);
+            adminRepository.save(admin);
+        }
     }
 
 }
