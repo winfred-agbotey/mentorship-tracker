@@ -9,7 +9,8 @@ import com.mentorshiptracker.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.mentorshiptracker.constants.AppConstants.*;
 
@@ -52,7 +53,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         Permission manageMentorshipPermission = permissionRepository.findByName(MANAGE_MENTORSHIP);
         Permission viewMentorshipPermission = permissionRepository.findByName(VIEW_MENTORSHIP);
         //set list of permissions on role
-        mentorshipManagerRole.setPermissions(List.of(manageMentorshipPermission, viewMentorshipPermission));
+        mentorshipManagerRole.setPermissions(Set.of(manageMentorshipPermission, viewMentorshipPermission));
 
         boolean mentorshipManagerRoleExists = roleRepository.existsByName(MANAGER_ROLE_NAME);
         if (!mentorshipManagerRoleExists) {
@@ -78,8 +79,8 @@ public class SeedDataServiceImpl implements SeedDataService {
 
         Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
         Admin admin = new Admin("admin", "admin@mentor.com", "admin123");
-        boolean adminExists = adminRepository.existsByEmail(admin.getEmail());
-        if (!adminExists){
+        Optional<Admin> adminExists = adminRepository.existsByEmail(admin.getEmail());
+        if (adminExists.isEmpty()) {
             admin.setRole(administratorRole);
             adminRepository.save(admin);
         }
