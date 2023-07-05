@@ -6,6 +6,7 @@ import com.mentorshiptracker.models.Role;
 import com.mentorshiptracker.repository.AdminRepository;
 import com.mentorshiptracker.repository.PermissionRepository;
 import com.mentorshiptracker.repository.RoleRepository;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import static com.mentorshiptracker.constants.AppConstants.*;
 @Service
 @RequiredArgsConstructor
 public class SeedDataServiceImpl implements SeedDataService {
+    Dotenv  dotenv = Dotenv.load();
     private final AdminRepository adminRepository;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
@@ -78,7 +80,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         */
 
         Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
-        Admin admin = new Admin("admin", "admin@mentor.com", "admin123");
+        Admin admin = new Admin(dotenv.get("ADMIN_USERNAME"), dotenv.get("ADMIN_EMAIL"), dotenv.get("ADMIN_PASSWORD"));
         Optional<Admin> adminExists = adminRepository.existsByEmail(admin.getEmail());
         if (adminExists.isEmpty()) {
             admin.setRole(administratorRole);

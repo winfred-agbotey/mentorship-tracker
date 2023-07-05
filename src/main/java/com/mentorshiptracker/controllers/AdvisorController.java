@@ -1,2 +1,10 @@
-package com.mentorshiptracker.controllers;public class AdvisorController {
+package com.mentorshiptracker.controllers;
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("api/v1/admin")
+public class AdvisorController {
 }
