@@ -16,9 +16,6 @@ import java.time.LocalDate;
 @Table(name = "advisees")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Advisee extends User {
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;

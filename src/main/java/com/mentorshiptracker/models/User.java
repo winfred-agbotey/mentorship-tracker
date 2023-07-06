@@ -1,5 +1,6 @@
 package com.mentorshiptracker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,9 @@ public class User {
     private String username;
     private String email;
     private String password;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

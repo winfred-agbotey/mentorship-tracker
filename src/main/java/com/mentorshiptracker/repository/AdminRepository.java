@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface AdminRepository extends JpaRepository<Admin, UUID> {
-    Optional<Admin> existsByEmail(String name);
+    boolean existsByEmail(String name);
 }

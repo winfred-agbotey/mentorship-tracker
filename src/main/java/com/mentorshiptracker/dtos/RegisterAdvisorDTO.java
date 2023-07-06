@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminResponseDTO {
+public class RegisterAdvisorDTO {
     private String username;
     private String email;
+    private String password;
     private Role role;
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateModified;
+
 }
