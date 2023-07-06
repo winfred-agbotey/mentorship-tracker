@@ -39,6 +39,9 @@ public class  Permission {
         this.name = name;
         this.description = description;
     }
+    public Permission(String name) {
+        this.name = name;
+    }
     public Permission( String name, String description) {
         this.name = name;
         this.description = description;

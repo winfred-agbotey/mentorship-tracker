@@ -52,8 +52,8 @@ public class SeedDataServiceImpl implements SeedDataService {
         //Instantiate a new manager role
         Role mentorshipManagerRole = new Role(MANAGER_ROLE_NAME, "Perform mentorship associated CRUD actions");
         //find permissions
-        Permission manageMentorshipPermission = permissionRepository.findByName(MANAGE_MENTORSHIP);
-        Permission viewMentorshipPermission = permissionRepository.findByName(VIEW_MENTORSHIP);
+        Permission manageMentorshipPermission = permissionRepository.findByNameIgnoreCase(MANAGE_MENTORSHIP);
+        Permission viewMentorshipPermission = permissionRepository.findByNameIgnoreCase(VIEW_MENTORSHIP);
         //set list of permissions on role
         mentorshipManagerRole.setPermissions(Set.of(manageMentorshipPermission, viewMentorshipPermission));
 

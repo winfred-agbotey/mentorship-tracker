@@ -1,2 +1,11 @@
-package com.mentorshiptracker.exceptions;public class PrivilegeException {
+package com.mentorshiptracker.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class PrivilegeException extends RuntimeException {
+    public PrivilegeException(String message){
+        super(message);
+    }
 }
