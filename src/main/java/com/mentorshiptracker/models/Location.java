@@ -1,5 +1,6 @@
 package com.mentorshiptracker.models;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,23 +9,19 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
-@Data
 @Entity
+@Table(name = "locations")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "permissions")
-public class  Permission {
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-
-    @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles;
+    private String country;
+    private String city;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -33,14 +30,4 @@ public class  Permission {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private LocalDateTime dateModified;
-
-    public Permission(UUID id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
-    public Permission( String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 }

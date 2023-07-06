@@ -6,16 +6,19 @@ import com.mentorshiptracker.models.Role;
 import com.mentorshiptracker.repository.AdminRepository;
 import com.mentorshiptracker.repository.PermissionRepository;
 import com.mentorshiptracker.repository.RoleRepository;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.mentorshiptracker.constants.AppConstants.*;
 
 @Service
 @RequiredArgsConstructor
 public class SeedDataServiceImpl implements SeedDataService {
+    Dotenv  dotenv = Dotenv.load();
     private final AdminRepository adminRepository;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
@@ -52,7 +55,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         Permission manageMentorshipPermission = permissionRepository.findByName(MANAGE_MENTORSHIP);
         Permission viewMentorshipPermission = permissionRepository.findByName(VIEW_MENTORSHIP);
         //set list of permissions on role
-        mentorshipManagerRole.setPermissions(List.of(manageMentorshipPermission, viewMentorshipPermission));
+        mentorshipManagerRole.setPermissions(Set.of(manageMentorshipPermission, viewMentorshipPermission));
 
         boolean mentorshipManagerRoleExists = roleRepository.existsByName(MANAGER_ROLE_NAME);
         if (!mentorshipManagerRoleExists) {
@@ -77,9 +80,9 @@ public class SeedDataServiceImpl implements SeedDataService {
         */
 
         Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
-        Admin admin = new Admin("admin", "admin@mentor.com", "admin123");
-        boolean adminExists = adminRepository.existsByEmail(admin.getEmail());
-        if (!adminExists){
+        Admin admin = new Admin(dotenv.get("ADMIN_USERNAME"), dotenv.get("ADMIN_EMAIL"), dotenv.get("ADMIN_PASSWORD"));
+        Optional<Admin> adminExists = adminRepository.existsByEmail(admin.getEmail());
+        if (adminExists.isEmpty()) {
             admin.setRole(administratorRole);
             adminRepository.save(admin);
         }

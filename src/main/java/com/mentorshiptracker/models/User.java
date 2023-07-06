@@ -8,23 +8,21 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
-@Data
 @Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "permissions")
-public class  Permission {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-
-    @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles;
+    private String username;
+    private String email;
+    private String password;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -34,13 +32,5 @@ public class  Permission {
     @UpdateTimestamp
     private LocalDateTime dateModified;
 
-    public Permission(UUID id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
-    public Permission( String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+
 }
