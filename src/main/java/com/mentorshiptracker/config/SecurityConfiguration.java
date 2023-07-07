@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -30,6 +31,7 @@ public class SecurityConfiguration {
                         .requestMatchers(POST,"api/advisor/**").hasAnyAuthority("Administrator")
                         .requestMatchers("api/admin/**").hasAnyRole("Administrator")
                         .requestMatchers(POST,"api/admin/**").hasAnyAuthority("Administrator")
+                        .requestMatchers(GET,"api/admin/**").hasAnyAuthority("Administrator")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

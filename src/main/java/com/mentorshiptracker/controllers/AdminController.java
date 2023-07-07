@@ -22,4 +22,5 @@ public class AdminController {
         AdminResponseDTO createdAdmin = adminService.createAdmin(adminRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
     }
+
 }

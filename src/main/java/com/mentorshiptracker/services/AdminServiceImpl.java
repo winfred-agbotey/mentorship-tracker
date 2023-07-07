@@ -11,6 +11,7 @@ import com.mentorshiptracker.repository.AdminRepository;
 import com.mentorshiptracker.repository.RoleRepository;
 import com.mentorshiptracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import static com.mentorshiptracker.constants.AppConstants.ADMIN_ROLE_NAME;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdminServiceImpl implements AdminService {
     private final ObjectMapper objectMapper;
     private final AdminRepository adminRepository;
@@ -31,6 +33,7 @@ public class AdminServiceImpl implements AdminService {
     public AdminResponseDTO createAdmin(AdminRequestDTO adminRequestDTO) {
         Optional<User> adminExists = userRepository.findUsersByEmail(adminRequestDTO.getEmail());
         if (adminExists.isPresent()) {
+            log.error("Email is Already in use");
             throw new UserException("Email is already in use!!!");
         }
         Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
@@ -38,6 +41,14 @@ public class AdminServiceImpl implements AdminService {
         admin.setPassword(passwordEncoder.encode(adminRequestDTO.getPassword()));
         admin.setRole(administratorRole);
         Admin newAdmin = adminRepository.save(admin);
+        System.out.println(newAdmin.getRole());
+        System.out.println(newAdmin.getUsername());
+        log.info("Admin successfully created...");
+//        return new AdminResponseDTO(
+//                admin.getUsername(), admin.getEmail(), admin.getRole(), admin.getDateCreated(), admin.getDateModified()
+//        );
+
+        System.out.println(objectMapper.convertValue(newAdmin, AdminResponseDTO.class));
         return objectMapper.convertValue(newAdmin, AdminResponseDTO.class);
     }
 }

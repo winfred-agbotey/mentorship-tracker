@@ -41,13 +41,14 @@ public class Role {
     )
     private Set<Permission> permissions;
 
-    public List<SimpleGrantedAuthority> getAuthorities(){
-        var authorities = getPermissions()
+
+    public Set<SimpleGrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> role = getPermissions()
                 .stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                .collect(Collectors.toList());
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name));
-        return authorities;
+                .collect(Collectors.toSet());
+        role.add(new SimpleGrantedAuthority("ROLE_" + this.name));
+        return role;
     }
 
     public Role(UUID id, String name, String description) {
@@ -55,7 +56,8 @@ public class Role {
         this.name = name;
         this.description = description;
     }
-    public Role( String name, String description) {
+
+    public Role(String name, String description) {
         this.name = name;
         this.description = description;
     }

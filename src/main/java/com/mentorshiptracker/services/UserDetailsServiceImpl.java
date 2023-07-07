@@ -5,7 +5,7 @@ import com.mentorshiptracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import com.mentorshiptracker.models.userDetailConverter.UserInfoUserDetails;
+import com.mentorshiptracker.models.converter.UserInfoUserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
