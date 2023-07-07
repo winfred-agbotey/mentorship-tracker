@@ -37,9 +37,9 @@ public class AuthenticationServiceImpl implements AuthService {
                     throw new UserException("Email already in use");
                 });
         Advisor advisorEntity = objectMapper.convertValue(requestDTO, Advisor.class);
-        Role administratorRole = roleRepository.findByName(MANAGER_ROLE_NAME);
+        Role managerRole = roleRepository.findByName(MANAGER_ROLE_NAME);
         advisorEntity.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-        advisorEntity.setRole(administratorRole);
+        advisorEntity.setRole(managerRole);
         advisorRepository.save(advisorEntity);
         var jwtToken = jwtService.generateToken(advisorEntity.getEmail());
         return AuthenticationResponse.builder()

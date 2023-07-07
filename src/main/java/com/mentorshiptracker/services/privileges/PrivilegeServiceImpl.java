@@ -47,10 +47,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
         }
         role.setPermissions(permissions);
         boolean roleExists = roleRepository.existsByName(role.getName());
-        if (!roleExists) {
-            return roleRepository.save(role);
-        } else {
+        if (roleExists) {
             throw new PrivilegeException("Role already Exists!");
         }
+        return roleRepository.save(role);
     }
 }

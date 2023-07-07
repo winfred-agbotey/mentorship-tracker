@@ -44,11 +44,11 @@ public class AdminServiceImpl implements AdminService {
         System.out.println(newAdmin.getRole());
         System.out.println(newAdmin.getUsername());
         log.info("Admin successfully created...");
-//        return new AdminResponseDTO(
-//                admin.getUsername(), admin.getEmail(), admin.getRole(), admin.getDateCreated(), admin.getDateModified()
-//        );
+        return new AdminResponseDTO(
+                admin.getUsername(), admin.getEmail(), admin.getRole(), admin.getDateCreated(), admin.getDateModified()
+        );
 
-        System.out.println(objectMapper.convertValue(newAdmin, AdminResponseDTO.class));
-        return objectMapper.convertValue(newAdmin, AdminResponseDTO.class);
+//        System.out.println(objectMapper.convertValue(newAdmin, AdminResponseDTO.class));
+//        return objectMapper.convertValue(newAdmin, AdminResponseDTO.class);
     }
 }

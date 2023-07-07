@@ -3,6 +3,7 @@ package com.mentorshiptracker.controllers;
 import com.mentorshiptracker.dtos.AdminRequestDTO;
 import com.mentorshiptracker.dtos.AdminResponseDTO;
 import com.mentorshiptracker.services.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/admin")
-    public ResponseEntity<AdminResponseDTO> createAdmin(@RequestBody AdminRequestDTO adminRequestDTO) {
+    public ResponseEntity<AdminResponseDTO> createAdmin(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
         AdminResponseDTO createdAdmin = adminService.createAdmin(adminRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
     }
