@@ -36,13 +36,11 @@ public class AdminServiceImpl implements AdminService {
             log.error("Email is Already in use");
             throw new UserException("Email is already in use!!!");
         }
-        Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
+        Role administratorRole = roleRepository.findByNameIgnoreCase(ADMIN_ROLE_NAME);
         Admin admin = objectMapper.convertValue(adminRequestDTO, Admin.class);
         admin.setPassword(passwordEncoder.encode(adminRequestDTO.getPassword()));
         admin.setRole(administratorRole);
-        Admin newAdmin = adminRepository.save(admin);
-        System.out.println(newAdmin.getRole());
-        System.out.println(newAdmin.getUsername());
+       adminRepository.save(admin);
         log.info("Admin successfully created...");
         return new AdminResponseDTO(
                 admin.getUsername(), admin.getEmail(), admin.getRole(), admin.getDateCreated(), admin.getDateModified()

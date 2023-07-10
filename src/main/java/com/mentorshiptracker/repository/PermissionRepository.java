@@ -10,8 +10,6 @@ public interface PermissionRepository extends JpaRepository<Permission, UUID> {
 
     Permission findByNameIgnoreCase(String permission);
 
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
-//    @Query("SELECT p FROM Permission p WHERE p.name IN :names")
-    Set<Permission> findAllByNameIn(Set<String> permissions);
 }

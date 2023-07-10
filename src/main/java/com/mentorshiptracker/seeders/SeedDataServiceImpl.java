@@ -45,9 +45,9 @@ public class SeedDataServiceImpl implements SeedDataService {
         Permission viewMentorshipPermission = new Permission(VIEW_MENTORSHIP, "View mentorship only");
         Permission adminPermission = new Permission(ADMIN_PERMISSION,"manage entire system");
         //check if permissions exists
-        boolean manageMentorshipPermissionExists = permissionRepository.existsByName(MANAGE_MENTORSHIP);
-        boolean viewMentorshipPermissionExists = permissionRepository.existsByName(VIEW_MENTORSHIP);
-        boolean adminPermissionExists = permissionRepository.existsByName(ADMIN_PERMISSION);
+        boolean manageMentorshipPermissionExists = permissionRepository.existsByNameIgnoreCase(MANAGE_MENTORSHIP);
+        boolean viewMentorshipPermissionExists = permissionRepository.existsByNameIgnoreCase(VIEW_MENTORSHIP);
+        boolean adminPermissionExists = permissionRepository.existsByNameIgnoreCase(ADMIN_PERMISSION);
         if (!adminPermissionExists){
             permissionRepository.save(adminPermission);
         }
@@ -70,14 +70,14 @@ public class SeedDataServiceImpl implements SeedDataService {
         //set list of permissions on role
         mentorshipManagerRole.setPermissions(Set.of(manageMentorshipPermission, viewMentorshipPermission));
 
-        boolean mentorshipManagerRoleExists = roleRepository.existsByName(MANAGER_ROLE_NAME);
+        boolean mentorshipManagerRoleExists = roleRepository.existsByNameIgnoreCase(MANAGER_ROLE_NAME);
         if (!mentorshipManagerRoleExists) {
             roleRepository.save(mentorshipManagerRole);
         }
 
         Role administratorRole = new Role(ADMIN_ROLE_NAME, "Perform all actions");
         administratorRole.setPermissions(Set.of(manageMentorshipPermission,viewMentorshipPermission,adminPermission));
-        boolean administratorRoleExists = roleRepository.existsByName(ADMIN_ROLE_NAME);
+        boolean administratorRoleExists = roleRepository.existsByNameIgnoreCase(ADMIN_ROLE_NAME);
         if (!administratorRoleExists) {
             roleRepository.save(administratorRole);
         }
@@ -92,7 +92,7 @@ public class SeedDataServiceImpl implements SeedDataService {
         3. set admin Role and save
         */
 
-        Role administratorRole = roleRepository.findByName(ADMIN_ROLE_NAME);
+        Role administratorRole = roleRepository.findByNameIgnoreCase(ADMIN_ROLE_NAME);
         Admin admin = new Admin(dotenv.get("ADMIN_USERNAME"), dotenv.get("ADMIN_EMAIL"), passwordEncoder.encode(dotenv.get("ADMIN_PASSWORD")));
         Optional<User> adminExists = userRepository.findUsersByEmail(admin.getEmail());
         if (adminExists.isEmpty()) {

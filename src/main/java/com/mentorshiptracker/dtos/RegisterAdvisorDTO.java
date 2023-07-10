@@ -20,7 +20,6 @@ public class RegisterAdvisorDTO {
     private String email;
     @NotNull(message = "field is required")
     private String password;
-    @NotNull(message = "field is required")
     private Role role;
 
 }
