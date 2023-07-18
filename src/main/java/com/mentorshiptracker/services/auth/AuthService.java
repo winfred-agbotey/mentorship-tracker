@@ -2,9 +2,9 @@ package com.mentorshiptracker.services.auth;
 
 import com.mentorshiptracker.dtos.AuthRequest;
 import com.mentorshiptracker.dtos.AuthenticationResponse;
-import com.mentorshiptracker.dtos.RegisterAdvisorDTO;
+import com.mentorshiptracker.dtos.AdvisorDTO;
 
 public interface AuthService {
-    AuthenticationResponse registerAdvisor(RegisterAdvisorDTO requestDTO);
+    AuthenticationResponse registerAdvisor(AdvisorDTO requestDTO);
     AuthenticationResponse authenticate(AuthRequest authRequestDTO);
 }

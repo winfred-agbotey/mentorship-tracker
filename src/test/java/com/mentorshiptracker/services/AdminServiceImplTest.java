@@ -3,31 +3,30 @@ package com.mentorshiptracker.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentorshiptracker.dtos.AdminRequestDTO;
 import com.mentorshiptracker.dtos.AdminResponseDTO;
+import com.mentorshiptracker.exceptions.UserException;
 import com.mentorshiptracker.models.Admin;
 import com.mentorshiptracker.models.Role;
+import com.mentorshiptracker.models.User;
 import com.mentorshiptracker.repository.AdminRepository;
 import com.mentorshiptracker.repository.RoleRepository;
 import com.mentorshiptracker.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static com.mentorshiptracker.constants.AppConstants.ADMIN_ROLE_NAME;
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@DataJpaTest
-@ExtendWith(MockitoExtension.class)
+
 class AdminServiceImplTest {
     //creating a mock service to mimic that of an actual object
     @Mock
@@ -36,12 +35,12 @@ class AdminServiceImplTest {
     private RoleRepository roleRepository;
     @Mock
     private AdminRepository adminRepository;
-    @Mock
-    private AdminService underTest;
+    @InjectMocks
+    private AdminServiceImpl adminService;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
 
 
     @AfterEach
@@ -51,8 +50,7 @@ class AdminServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        new AdminServiceImpl(objectMapper, adminRepository, roleRepository, userRepository, passwordEncoder);
-//        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
 
@@ -60,30 +58,46 @@ class AdminServiceImplTest {
     void createAdmin() {
         //Given
         AdminRequestDTO adminRequestDTO = new AdminRequestDTO("admin", "admin@gmail.com", "admin123");
-        when(userRepository.findUsersByEmail(adminRequestDTO.getEmail())).thenReturn(Optional.empty());
         Admin admin = new Admin("admin", "admin@gmail.com", "encodedPassword");
-
-        Role role = new Role("ADMIN", "admin role");
-        when(roleRepository.findByNameIgnoreCase(role.getName())).thenReturn(role);
-
-        //When
-        when(objectMapper.convertValue(adminRequestDTO, Admin.class)).thenReturn(admin);
-        when(passwordEncoder.encode(adminRequestDTO.getPassword())).thenReturn("encodedPassword");
-        when(adminRepository.save(admin)).thenReturn(admin);
-
-//        verify(adminRepository).save();
-
-//        Admin admin = new Admin(adminRequestDTO.getUsername(),adminRequestDTO.getEmail(),"encodedPassword");
         AdminResponseDTO results = new AdminResponseDTO(
                 admin.getUsername(), admin.getEmail(), admin.getRole(), admin.getDateCreated(), admin.getDateModified()
         );
-//        assertThat(admin).isEqualTo(adminRequestDTO);
-        assertEquals(results, underTest.createAdmin(adminRequestDTO));
+        Role role = new Role("Administrator","Administrator role");
+
+        admin.setRole(role);
+        //When
+        when(userRepository.findUsersByEmail(adminRequestDTO.getEmail())).thenReturn(Optional.empty());
+        when(roleRepository.findByNameIgnoreCase(ADMIN_ROLE_NAME)).thenReturn(role);
+        when(objectMapper.convertValue(adminRequestDTO, Admin.class)).thenReturn(admin);
+        when(passwordEncoder.encode(adminRequestDTO.getPassword())).thenReturn("encodedPassword");
+        when(adminRepository.save(admin)).thenReturn(admin);
+        when(objectMapper.convertValue(admin, AdminResponseDTO.class)).thenReturn(results);
+
+        assertEquals(adminService.createAdmin(adminRequestDTO),results);
+        verify(userRepository).findUsersByEmail(adminRequestDTO.getEmail());
+        verify(passwordEncoder).encode(adminRequestDTO.getPassword());
+        verify(adminRepository).save(any(Admin.class));
+
+
 
     }
 
     @Test
-    @Disabled
     void willThrowWhenEmailIsTaken() {
+        //given
+        AdminRequestDTO adminRequestDTO = new AdminRequestDTO(
+
+                "Jamila",
+                "jamila@gmail.com",
+                "password123"
+        );
+
+        when(userRepository.findUsersByEmail(adminRequestDTO.getEmail())).thenReturn(Optional.of(new User()));
+        //then
+        assertThatThrownBy(() -> adminService.createAdmin(adminRequestDTO))
+                .isInstanceOf(UserException.class)
+                .hasMessage("Email is already in use!!!");
+
+        verify(userRepository, never()).save(any());
     }
 }

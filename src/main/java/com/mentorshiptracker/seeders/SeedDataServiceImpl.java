@@ -81,6 +81,12 @@ public class SeedDataServiceImpl implements SeedDataService {
         if (!administratorRoleExists) {
             roleRepository.save(administratorRole);
         }
+
+        Role adviseeRole = new Role(ADVISEE_ROLE_NAME, "Perform all advisee actions");
+        boolean adviseeRoleExists = roleRepository.existsByNameIgnoreCase(ADVISEE_ROLE_NAME);
+        if (!adviseeRoleExists) {
+            roleRepository.save(adviseeRole);
+        }
     }
 
     @Override

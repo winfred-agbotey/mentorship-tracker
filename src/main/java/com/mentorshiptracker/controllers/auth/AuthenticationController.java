@@ -1,8 +1,8 @@
 package com.mentorshiptracker.controllers.auth;
 
 import com.mentorshiptracker.dtos.AuthRequest;
-import com.mentorshiptracker.dtos.AuthenticationResponse;
-import com.mentorshiptracker.dtos.RegisterAdvisorDTO;
+import com.mentorshiptracker.dtos.AdvisorDTO;
+import com.mentorshiptracker.dtos.ResponseHandler;
 import com.mentorshiptracker.services.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +21,13 @@ public class AuthenticationController {
 
     private final AuthService authService;
 
-    @PostMapping("/advisor")
-    public ResponseEntity<AuthenticationResponse> registerAdvisor(@Valid @RequestBody RegisterAdvisorDTO requestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerAdvisor(requestDTO));
+    @PostMapping("/v1/advisor")
+    public ResponseEntity<Object> registerAdvisor(@Valid @RequestBody AdvisorDTO requestDTO) {
+        return ResponseHandler.successResponse(HttpStatus.CREATED, authService.registerAdvisor(requestDTO));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthRequest authRequestDTO) {
-        return ResponseEntity.ok(authService.authenticate(authRequestDTO));
+    @PostMapping("/v1/authenticate")
+    public ResponseEntity<Object> authenticate(@Valid @RequestBody AuthRequest authRequestDTO) {
+        return ResponseHandler.successResponse(HttpStatus.OK, authService.authenticate(authRequestDTO));
     }
 }

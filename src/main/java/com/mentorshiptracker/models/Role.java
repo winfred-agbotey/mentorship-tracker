@@ -6,13 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -41,15 +38,6 @@ public class Role {
     )
     private Set<Permission> permissions;
 
-
-    public Set<SimpleGrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> role = getPermissions()
-                .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                .collect(Collectors.toSet());
-        role.add(new SimpleGrantedAuthority("ROLE_" + this.name));
-        return role;
-    }
 
     public Role(UUID id, String name, String description) {
         this.id = id;
