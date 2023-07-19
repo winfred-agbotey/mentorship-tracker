@@ -18,9 +18,6 @@ import java.util.Set;
 @Table(name = "advisors")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Advisor extends User {
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;

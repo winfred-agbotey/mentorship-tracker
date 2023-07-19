@@ -16,14 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "permissions")
-public class  Permission {
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions")
     private Set<Role> roles;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,7 +39,12 @@ public class  Permission {
         this.name = name;
         this.description = description;
     }
-    public Permission( String name, String description) {
+
+    public Permission(String name) {
+        this.name = name;
+    }
+
+    public Permission(String name, String description) {
         this.name = name;
         this.description = description;
     }

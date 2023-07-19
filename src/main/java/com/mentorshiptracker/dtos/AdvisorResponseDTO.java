@@ -1,22 +1,20 @@
 package com.mentorshiptracker.dtos;
 
+import com.mentorshiptracker.models.Location;
 import com.mentorshiptracker.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminResponseDTO {
+public class AdvisorResponseDTO {
     private String username;
     private String email;
+    private LocalDate dateOfBirth;
     private Role role;
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateModified;
+    private Location location;
 }

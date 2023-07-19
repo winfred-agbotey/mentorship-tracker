@@ -31,19 +31,21 @@ public class Role {
     @UpdateTimestamp
     private LocalDateTime dateModified;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions;
 
+
     public Role(UUID id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
-    public Role( String name, String description) {
+
+    public Role(String name, String description) {
         this.name = name;
         this.description = description;
     }

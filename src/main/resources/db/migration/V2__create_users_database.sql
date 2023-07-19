@@ -12,7 +12,6 @@ CREATE TABLE locations
 CREATE TABLE advisors
 (
     user_id       UUID PRIMARY KEY REFERENCES users (id),
-    role_id       UUID REFERENCES roles (id),
     date_of_birth DATE,
     location_id   UUID REFERENCES locations (id),
     CONSTRAINT fk_advisors_user_id FOREIGN KEY (user_id) REFERENCES users (id)
@@ -22,7 +21,6 @@ CREATE TABLE advisors
 CREATE TABLE advisees
 (
     user_id       UUID PRIMARY KEY REFERENCES users (id),
-    role_id       UUID REFERENCES roles (id),
     date_of_birth DATE,
     location_id   UUID REFERENCES locations (id),
     advisor_id    UUID REFERENCES advisors (user_id),

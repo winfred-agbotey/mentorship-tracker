@@ -26,16 +26,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserException.class)
-    public final ResponseEntity<ErrorResponse> handlerUserNotFoundExceptions(Exception ex, WebRequest request) {
+    public final ResponseEntity<ErrorResponse> handlerUserExceptions(Exception ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(SecurityExceptions.class)
-//    public final ResponseEntity<ErrorResponse> handlerSecurityExceptions(Exception ex, WebRequest request) {
-//        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-//        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-//    }
+    @ExceptionHandler(PrivilegeException.class)
+    public final ResponseEntity<ErrorResponse> handlePrivilegeExceptions(Exception ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,13 +51,6 @@ public class GlobalExceptionHandler {
         return new GlobalErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation Error", errors);
     }
 
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    @ExceptionHandler(ExpiredJwtException.class)
-//    public GlobalErrorResponse handleExpiredJwtException(ExpiredJwtException ex) {
-//        Map<String, String> errors = new LinkedHashMap<>();
-//        errors.put("token", "Token has expired. Please login and try again");
-//        return new GlobalErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Unauthorized", errors);
-//    }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(GeneralSecurityException.class)

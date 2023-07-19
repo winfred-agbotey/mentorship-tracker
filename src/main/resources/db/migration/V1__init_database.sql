@@ -12,15 +12,14 @@ CREATE TABLE users
     username      VARCHAR(255) NOT NULL,
     email         VARCHAR(255) NOT NULL,
     password      VARCHAR(255) NOT NULL,
+    role_id       UUID REFERENCES roles (id),
     date_created  TIMESTAMP,
     date_modified TIMESTAMP
 );
 -- Create admins table
 CREATE TABLE admins
 (
-    user_id  UUID PRIMARY KEY REFERENCES users (id),
-    role_id  UUID REFERENCES roles (id)
-
+    user_id  UUID PRIMARY KEY REFERENCES users (id)
 );
 
 -- Create permissions table

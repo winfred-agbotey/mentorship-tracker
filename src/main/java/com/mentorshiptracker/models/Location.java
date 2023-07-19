@@ -30,4 +30,9 @@ public class Location {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private LocalDateTime dateModified;
+
+    public Location(String country, String city) {
+        this.country = country;
+        this.city = city;
+    }
 }
