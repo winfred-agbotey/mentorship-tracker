@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthService authService;
 
-    @PostMapping("/v1/advisor")
+    @PostMapping("/v1/auth/advisor")
     public ResponseEntity<Object> registerAdvisor(@Valid @RequestBody AdvisorDTO requestDTO) {
         return ResponseHandler.successResponse(HttpStatus.CREATED, authService.registerAdvisor(requestDTO));
     }
 
-    @PostMapping("/v1/authenticate")
+    @PostMapping("/v1/auth/authenticate")
     public ResponseEntity<Object> authenticate(@Valid @RequestBody AuthRequest authRequestDTO) {
         return ResponseHandler.successResponse(HttpStatus.OK, authService.authenticate(authRequestDTO));
     }

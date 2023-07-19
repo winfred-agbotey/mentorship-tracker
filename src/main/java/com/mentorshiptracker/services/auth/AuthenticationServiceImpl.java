@@ -1,13 +1,14 @@
 package com.mentorshiptracker.services.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mentorshiptracker.dtos.AdvisorDTO;
 import com.mentorshiptracker.dtos.AuthRequest;
 import com.mentorshiptracker.dtos.AuthenticationResponse;
-import com.mentorshiptracker.dtos.AdvisorDTO;
 import com.mentorshiptracker.exceptions.UserException;
 import com.mentorshiptracker.models.Advisor;
 import com.mentorshiptracker.models.Location;
 import com.mentorshiptracker.models.Role;
+import com.mentorshiptracker.models.User;
 import com.mentorshiptracker.repository.AdvisorRepository;
 import com.mentorshiptracker.repository.LocationRepository;
 import com.mentorshiptracker.repository.RoleRepository;
@@ -39,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthService {
     public AuthenticationResponse registerAdvisor(AdvisorDTO requestDTO) {
         userRepository.findUsersByEmail(requestDTO.getEmail())
                 .ifPresent(existingUser -> {
-                    throw new UserException("Email already in use");
+                    throw new UserException("Email is already in use!!!");
                 });
         Advisor advisorEntity = objectMapper.convertValue(requestDTO, Advisor.class);
         Role managerRole = roleRepository.findByNameIgnoreCase(MANAGER_ROLE_NAME);
@@ -52,9 +53,11 @@ public class AuthenticationServiceImpl implements AuthService {
         });
         advisorEntity.setLocation(location);
         advisorRepository.save(advisorEntity);
-        var jwtToken = jwtService.generateToken(advisorEntity.getEmail());
+        String accessToken = jwtService.generateToken(advisorEntity.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(advisorEntity.getEmail());
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -68,11 +71,13 @@ public class AuthenticationServiceImpl implements AuthService {
                 )
         );
 
-        var user = userRepository.findUsersByEmail(authRequestDTO.getEmail())
+        User user = userRepository.findUsersByEmail(authRequestDTO.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user.getEmail());
+        String accessToken = jwtService.generateToken(user.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
