@@ -1,5 +1,6 @@
 package com.mentorshiptracker.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtService {
+    Dotenv dotenv = Dotenv.load();
     private final SecretKey secretKey;
 
     public JwtService() {
@@ -49,15 +51,19 @@ public class JwtService {
 
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+        return createToken(claims, userName, Long.valueOf(dotenv.get("ACCESS_TOKEN_EXPIRATION")));
+    }
+    public String generateRefreshToken(String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userName, Long.valueOf(dotenv.get("REFRESH_TOKEN_EXPIRATION")));
     }
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(Map<String, Object> claims, String userName, Long expiration) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secretKey)
                 .compact();
     }

@@ -15,8 +15,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdviseeDTO {
+    @NotBlank(message = "Username is required")
     @NotNull(message = "username is required")
     private String username;
+
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
@@ -24,10 +26,11 @@ public class AdviseeDTO {
     @NotNull(message = "DOB is required")
     private LocalDate dateOfBirth;
 
+    @NotBlank(message = "password is required")
     @NotNull(message = "password is required")
     private String password;
+
     private Role role;
-    @NotNull(message = "Location is required")
     private Location location;
 
     public AdviseeDTO(@NotNull String username, String email, @NotNull LocalDate dateOfBirth, @NotNull String password, @NotNull Location location){

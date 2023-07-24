@@ -25,11 +25,10 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     public Permission createPermission(PermissionDTO permissionDTO) {
         Permission permission = objectMapper.convertValue(permissionDTO, Permission.class);
         boolean permissionExists = permissionRepository.existsByNameIgnoreCase(permission.getName());
-        if (!permissionExists) {
-            return permissionRepository.save(permission);
-        } else {
+        if (permissionExists) {
             throw new PrivilegeException("Permission Already Exists!");
         }
+        return permissionRepository.save(permission);
     }
 
     @Override
